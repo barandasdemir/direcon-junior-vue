@@ -1,6 +1,6 @@
 <template>
   <p id="pricing" class="title has-text-centered my-6">Pricing</p>
-  <div class="pricing-table mb-6 pb-6">
+  <div @mouseenter="$emit('hover')" class="pricing-table mb-6 pb-6">
     <div class="pricing-plan">
       <div class="plan-header">Starter</div>
       <div class="plan-price">
@@ -68,7 +68,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  emits: ['hover'],
+};
 </script>
 
 <style>

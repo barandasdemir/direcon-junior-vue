@@ -5,11 +5,17 @@
     </div>
 
     <div class="hero-body">
-      <div class="container has-text-centered">
+      <div v-if="!user" class="container has-text-centered">
         <p class="is-size-3">Ready to start? <span class="has-text-info">It's free!</span></p>
         <Link to="/register">
           <button class="mt-5 button is-size-3 is-primary is-rounded">Register Now!</button>
         </Link>
+      </div>
+      <div v-else class="container has-text-centered">
+        <p class="is-size-3">
+          Welcome, <span class="has-text-info">{{ user.email }}</span>
+        </p>
+        Would you like to check our pricing table below?
       </div>
     </div>
   </section>
@@ -38,14 +44,14 @@
     </h2>
   </section>
 
-  <PricingTable />
+  <PricingTable @hover="logEvent('hoveredPricing')" />
 
   <footer class="footer">
     <div class="content has-text-centered">
       <p>
-        <strong>Some landing page</strong> by <a href="https://barandasdemir.github.io">Baran Dasdemir</a>. The source code is
-        licensed <a href="https://opensource.org/licenses/GPL-3.0">GPLv3</a>. The website
-        content is licensed
+        <strong>Some landing page</strong> by
+        <a href="https://barandasdemir.github.io">Baran Dasdemir</a>. The source code is licensed
+        <a href="https://opensource.org/licenses/GPL-3.0">GPLv3</a>. The website content is licensed
         <a href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY SA 4.0</a>.
       </p>
     </div>
@@ -56,12 +62,27 @@
 import NavBar from '@/components/NavBar.vue';
 import Link from '@/components/Link.vue';
 import PricingTable from '@/components/PricingTable.vue';
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 
 export default {
   components: {
     NavBar,
     Link,
     PricingTable,
+  },
+  setup() {
+    const store = useStore();
+    const user = computed(() => store.state.details);
+
+    const logEvent = (e) => {
+      store.dispatch('logEvent', e);
+    };
+
+    return {
+      user,
+      logEvent,
+    };
   },
 };
 </script>

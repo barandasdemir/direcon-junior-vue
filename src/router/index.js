@@ -20,4 +20,16 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach(async (to) => {
+  const user = localStorage.getItem('user');
+
+  if (user && to.name === 'Register') {
+    return {
+      path: '/',
+    };
+  }
+
+  return true;
+});
+
 export default router;

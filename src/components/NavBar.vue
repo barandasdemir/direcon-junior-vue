@@ -21,9 +21,10 @@
         <div class="navbar-item">
           <div class="field is-grouped">
             <p class="control">
-              <Link to="/register">
+              <Link v-if="!user" to="/register">
                 <button class="button is-primary">Register</button>
               </Link>
+              <button v-else class="button is-danger" @click="logout">Logout</button>
             </p>
           </div>
         </div>
@@ -34,19 +35,31 @@
 
 <script>
 import Link from '@/components/Link.vue';
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 
 export default {
   components: {
     Link,
   },
   setup() {
+    const store = useStore();
+    const user = computed(() => store.state.details);
+
     const scrollToPricing = () => {
       const elem = document.querySelector('#pricing');
       window.scrollTo(0, elem.offsetTop);
+      store.dispatch('logEvent', 'navbarClick');
+    };
+
+    const logout = () => {
+      store.commit('logout');
     };
 
     return {
       scrollToPricing,
+      user,
+      logout,
     };
   },
 };
